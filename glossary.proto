@@ -1,0 +1,91 @@
+syntax = "proto3";
+
+package glossary;
+
+service GlossaryService {
+  // CRUD Operations
+  rpc CreateTerm(CreateTermRequest) returns (TermResponse);
+  rpc GetTerm(GetTermRequest) returns (TermResponse);
+  rpc GetAllTerms(GetAllTermsRequest) returns (GetAllTermsResponse);
+  rpc UpdateTerm(UpdateTermRequest) returns (TermResponse);
+  rpc DeleteTerm(DeleteTermRequest) returns (DeleteTermResponse);
+  
+  // Specialized queries for your thesis
+  rpc GetTermsByRenderingType(GetByRenderingTypeRequest) returns (GetAllTermsResponse);
+  rpc GetTermsByFramework(GetByFrameworkRequest) returns (GetAllTermsResponse);
+  rpc GetGlossaryStats(GetStatsRequest) returns (StatsResponse);
+}
+
+// Request/Response messages
+message CreateTermRequest {
+  string name = 1;
+  string description = 2;
+  string rendering_type = 3;
+  repeated string frameworks = 4;
+  repeated string use_cases = 5;
+  repeated string advantages = 6;
+  repeated string disadvantages = 7;
+}
+
+message GetTermRequest {
+  int32 id = 1;
+}
+
+message GetAllTermsRequest {
+  int32 limit = 1;
+  int32 offset = 2;
+}
+
+message UpdateTermRequest {
+  int32 id = 1;
+  string name = 2;
+  string description = 3;
+  string rendering_type = 4;
+  repeated string frameworks = 5;
+  repeated string use_cases = 6;
+  repeated string advantages = 7;
+  repeated string disadvantages = 8;
+}
+
+message DeleteTermRequest {
+  int32 id = 1;
+}
+
+message GetByRenderingTypeRequest {
+  string rendering_type = 1;
+}
+
+message GetByFrameworkRequest {
+  string framework_name = 1;
+}
+
+message GetStatsRequest {}
+
+// Response messages
+message TermResponse {
+  int32 id = 1;
+  string name = 2;
+  string description = 3;
+  string rendering_type = 4;
+  repeated string frameworks = 5;
+  repeated string use_cases = 6;
+  repeated string advantages = 7;
+  repeated string disadvantages = 8;
+}
+
+message GetAllTermsResponse {
+  repeated TermResponse terms = 1;
+  int32 total_count = 2;
+}
+
+message DeleteTermResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message StatsResponse {
+  int32 total_terms = 1;
+  map<string, int32> rendering_type_distribution = 2;
+  repeated string unique_frameworks = 3;
+  int32 total_frameworks_covered = 4;
+}
